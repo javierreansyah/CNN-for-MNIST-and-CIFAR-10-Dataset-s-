@@ -1,80 +1,84 @@
-# Model Architecture and Performance for MNIST and CIFAR-10 Datasets
+# CNN for MNIST and CIFAR-10 Dataset's
 
 ## Table of Contents
+1. [Introduction](#introduction)
+2. [MNIST Architecture](#mnist-architecture)
+3. [CIFAR-10 Architecture](#cifar-10-architecture)
+4. [Hyperparameters](#hyperparameters)
+5. [Results](#results)
 
-- [1. Introduction](#1-introduction)
-- [2. MNIST Model Architecture](#2-mnist-model-architecture)
-- [3. CIFAR-10 Model Architecture](#3-cifar-10-model-architecture)
-- [4. Hyperparameters](#4-hyperparameters)
-- [5. Results](#5-results)
-- [6. Conclusion](#6-conclusion)
+## Introduction
+This repository outlines the convolutional neural network architectures implemented for the MNIST and CIFAR-10 datasets. The MNIST dataset consists of handwritten digits, while CIFAR-10 contains 32x32 color images across 10 classes. 
 
-## 1. Introduction
+## MNIST Architecture
+The MNIST model consists of a simple convolutional neural network with the following layers:
 
-This document provides an overview of the deep learning models developed for classifying the MNIST and CIFAR-10 datasets. The architectures and training processes are outlined, along with their respective performance metrics.
+1. **Convolutional Layer**: 
+   - 16 filters, 5x5 kernel, ReLU activation.
+   - This layer extracts features from the input images.
 
-## 2. MNIST Model Architecture
+2. **Max Pooling Layer**: 
+   - Reduces spatial dimensions to half, helping to decrease computation and prevent overfitting.
 
-The MNIST model is a convolutional neural network (CNN) designed for digit classification. The architecture consists of:
+3. **Second Convolutional Layer**: 
+   - 32 filters, 5x5 kernel, ReLU activation.
+   - This layer extracts more complex features.
 
-- **Input Layer**: Accepts grayscale images of size 28x28 pixels.
-- **Convolutional Layer 1**:
-  - Filters: 32
-  - Kernel Size: 5x5
-  - Activation: ReLU
-- **Max Pooling Layer**: Reduces the spatial dimensions by half.
-- **Convolutional Layer 2**:
-  - Filters: 64
-  - Kernel Size: 5x5
-  - Activation: ReLU
-- **Max Pooling Layer**: Further reduces the spatial dimensions.
-- **Fully Connected Layer**: Flattens the output and maps to 10 output classes (digits 0-9).
+4. **Second Max Pooling Layer**: 
+   - Further reduces the dimensionality.
 
-This architecture allows the model to learn spatial hierarchies in the input images effectively.
+5. **Fully Connected Layer**: 
+   - Converts 2D feature maps into a 1D feature vector.
 
-### Performance
+6. **Output Layer**: 
+   - Produces probabilities for each of the 10 classes using softmax.
 
-- **Accuracy**: 99.58%
+### Model Summary
+- Input Size: 28x28 grayscale images
+- Output Classes: 10 (digits 0-9)
 
----
+## CIFAR-10 Architecture
+The CIFAR-10 model is a deeper convolutional neural network that is inspired by ResNet architectures:
 
-## 3. CIFAR-10 Model Architecture
+1. **First Convolutional Block**:
+   - Two convolutional layers with 64 filters each, 3x3 kernel, followed by batch normalization and ReLU activation.
+   - Max pooling reduces the spatial dimensions.
 
-The CIFAR-10 model is a deeper convolutional neural network tailored for classifying 32x32 color images across 10 classes. The architecture includes:
+2. **Second Convolutional Block**:
+   - Similar structure with 128 filters, which helps to learn higher-level features.
 
-- **Input Layer**: Accepts RGB images of size 32x32 pixels.
-- **Convolutional Block 1**:
-  - Two Convolutional Layers with 64 filters each
-  - Kernel Size: 3x3
-  - Activation: ReLU
-  - Max Pooling Layer: Reduces the spatial dimensions by half.
-- **Convolutional Block 2**:
-  - Two Convolutional Layers with 128 filters each
-  - Max Pooling Layer: Reduces the spatial dimensions by half.
-- **Convolutional Block 3**:
-  - Two Convolutional Layers with 256 filters each
-  - Max Pooling Layer: Reduces the spatial dimensions by half.
-- **Convolutional Block 4**:
-  - Two Convolutional Layers with 512 filters each
-  - Max Pooling Layer: Reduces the spatial dimensions by half.
-- **Fully Connected Layers**:
-  - A dropout layer to prevent overfitting followed by two fully connected layers to map to 10 output classes.
+3. **Third Convolutional Block**:
+   - Again similar, with 256 filters to further extract complex features.
 
-This architecture effectively captures complex patterns in the images due to its depth and use of multiple convolutional layers.
+4. **Fourth Convolutional Block**:
+   - Final block with 512 filters for advanced feature extraction.
 
-### Performance
+5. **Fully Connected Layers**:
+   - A dropout layer is used to reduce overfitting.
+   - Two fully connected layers to produce the final output.
 
-- **Accuracy**: 90.21%
+### Model Summary
+- Input Size: 32x32 RGB images
+- Output Classes: 10 (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck)
 
----
-
-## 4. Hyperparameters
+## Hyperparameters
 
 ### CIFAR-10 Hyperparameters
+| Parameter        | Value   | Descriptions                                        |
+|------------------|---------|-----------------------------------------------------|
+| Num Epochs       | 100     | Number of epochs for training; CIFAR-10 often requires more epochs to converge |
+| Num Classes      | 10      | Total number of classes in the CIFAR-10 dataset (0-9) |
+| Batch Size       | 256     | Increased batch size for better training efficiency |
+| Learning Rate    | 0.001   | Learning rate for the optimizer                     |
 
-```python
-num_epochs = 100  # Number of epochs for training; CIFAR-10 often requires more epochs to converge
-num_classes = 10  # Total number of classes in the CIFAR-10 dataset (0-9)
-batch_size = 256  # Increased batch size for better training efficiency
-learning_rate = 0.001  # Learning rate for the optimizer
-```
+### MNIST Hyperparameters
+| Parameter        | Value   | Descriptions                                        |
+|------------------|---------|-----------------------------------------------------|
+| Num Epochs       | 100     | Number of complete passes through the dataset       |
+| Num Classes      | 10      | Number of output classes (digits 0-9)               |
+| Batch Size       | 256     | Number of samples processed before updating model parameters |
+| Learning Rate    | 0.001   | Step size used by the optimizer to adjust the model's weights |
+
+## Results
+- **CIFAR-10 Accuracy**: 90.21%
+- **MNIST Accuracy**: 99.58%
